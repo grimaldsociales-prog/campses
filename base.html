@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>База — CAMPS.ES</title>
+<link rel="stylesheet" href="css/style.css"></head>
+<body data-page="base">
+<div class="wrap" id="root"></div>
+<div class="lb" id="lb"><button class="x" aria-label="Закрыть">×</button><button class="p" aria-label="Назад">‹</button><img id="lbi" alt=""><button class="n" aria-label="Вперёд">›</button></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="mbox"><button class="x" aria-label="Закрыть">×</button><span class="sticker">Заявка принята</span>
+ <h2 class="disp">Бронь<br>улетела!</h2><p>База подтвердит заявку в течение 24 часов. Копия — на ваш email. Деньги пока не списываются.</p><dl id="mdl"></dl>
+ <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="search.html">Искать другие базы</a><button class="btn ghost" id="mclose">Закрыть</button></div>
+ <p class="mono" style="margin-top:18px;color:var(--mute)">Демо-прототип: заявка никуда не отправляется.</p></div></div>
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const id=new URLSearchParams(location.search).get("id")||"dubrava";
+ const b=BASES.find(x=>x.id===id)||BASES[0];document.title=`${b.name} — CAMPS.ES`;
+ const I=b.infra;
+ const inf=Object.entries(INFRA).map(([k,t])=>{const v=I[k],ok=!!v;const n=typeof v==="number"?v:null;
+  const big=k==="fields"||k==="halls"?(n||"—"):ok?"✓":"—";
+  const sub=k==="lodging"?(ok?b.rooms+" номеров":"в отелях рядом"):ok?(n?"шт.":"есть"):"нет";
+  return `<div class="${ok?"yes":"no"}"><b>${big}</b><span>${t}</span><small>${sub}</small></div>`}).join("");
+ const incl=[
+  [I.lodging,"Проживание",I.lodging?`${b.rooms} номеров, 2–4 человека`:"в партнёрских отелях рядом"],
+  [I.meals,"Питание","Трёхразовое, меню согласуется с тренером"],
+  [I.fields||I.halls,"Аренда площадок",`${I.fields?I.fields+" полей":""}${I.fields&&I.halls?" и ":""}${I.halls?I.halls+" залов":""}`],
+  [I.med,"Медицинское сопровождение","Врач и массажист на базе"],
+  [true,"Раздевалки и сушка экипировки","Комната для формы и инвентаря"],
+  [true,"Зал для видеоразбора","Проектор и Wi-Fi"]].map(([ok,t,s])=>`<div class="${ok?"":"no"}"><i>${ok?"✓":"×"}</i><span>${t}<small>${ok?s:"не предусмотрено"}</small></span></div>`).join("");
+ const cats=["Поля и залы","Проживание","Питание","Организация","Цена / качество"];
+ const off=[0.1,-0.2,-0.1,0.1,-0.3];
+ const bars=cats.map((c,i)=>{const v=Math.min(5,Math.max(3.5,b.rating+off[i]));return `<div><span>${c}</span><u><i style="width:${v/5*100}%"></i></u><b>${v.toFixed(1)}</b></div>`}).join("");
+ const rv=[0,1,2,3].map(i=>{const r=REVIEWS[(i+b.pal)%REVIEWS.length];return `<div class="rv"><div class="st">${"★".repeat(r[2])}${"☆".repeat(5-r[2])}</div><p>«${r[0]}»</p><div class="who">${r[1]}</div></div>`}).join("");
+ const busyTxt=b.busy.length?b.busy.map(x=>x.map(rd).join(" – ")).join(", "):"свободно весь сезон";
+ $("#root").innerHTML=`
+ <div class="crumbs"><a href="index.html">Главная</a> / <a href="search.html">Каталог</a> / ${b.name}</div>
+ <div class="bhead"><div><h1 class="disp">${b.name}</h1>
+  <div class="meta"><span>${stars(b.rating)} · <u>${b.reviews} отзывов</u></span><span>📍 ${b.city}, ${b.region}</span><span class="v">✓ Проверено CAMPS.ES</span><span class="v" style="background:var(--lime);color:var(--ink)">${b.badge}</span></div></div>
+  <div class="acts"><button class="btn sm ghost" type="button">♡ Сохранить</button><button class="btn sm ghost" type="button">↗ Поделиться</button></div></div>
+ <div class="mos">${[0,1,2,3,4].map(i=>`<button type="button" data-i="${i}" aria-label="Фото ${i+1}">${photo(b,i,b.name+" — фото "+(i+1))}</button>`).join("")}<span class="all">▦ Все фото (${b.photos.length})</span></div>
+ <div class="blayout"><div>
+  <div class="stats"><div class="stat"><b>${b.cap}</b><span>мест максимум</span></div><div class="stat"><b>${b.area}</b><span>гектаров территории</span></div><div class="stat"><b>${I.fields+I.halls}</b><span>полей и залов</span></div><div class="stat"><b>${b.since}</b><span>принимаем команды с</span></div></div>
+  <div class="bsec" style="border:0;padding-top:0"><h2 class="disp">О базе</h2><p>${b.desc}</p><div class="chips" style="margin-top:18px">${b.sports.map(s=>`<span class="chip on">${s}</span>`).join("")}</div></div>
+  <div class="bsec"><h2 class="disp">Что входит</h2><div class="incl">${incl}</div></div>
+  <div class="bsec"><h2 class="disp">Инфраструктура</h2><div class="inf">${inf}</div></div>
+  <div class="bsec"><h2 class="disp">Занятость</h2><div class="cal" id="cal"></div><div class="legend"><span><i style="background:var(--blue)"></i>Ваши даты</span><span><i style="background:#e1ded2"></i>Занято</span></div></div>
+  <div class="bsec"><h2 class="disp">Цены</h2><table class="ptable">
+   <tr><td>Проживание и питание, чел./сутки</td><td>${fmt(b.price)} ₽</td></tr>
+   <tr><td>Аренда поля или зала, час</td><td>${fmt(Math.round(b.price*.9/100)*100)} ₽</td></tr>
+   <tr><td>Восстановительный блок, сеанс</td><td>${fmt(Math.round(b.price*.25/50)*50)} ₽</td></tr></table>
+   <p class="mono" style="margin-top:12px;color:var(--mute)">Цены вымышлены · занято: ${busyTxt}</p></div>
+  <div class="bsec"><h2 class="disp">Отзывы команд</h2><div class="rbig"><div><div class="n">${b.rating.toFixed(1)}</div><span class="mono" style="color:var(--mute)">${b.reviews} отзывов</span></div><div class="bars">${bars}</div></div><div class="rev">${rv}</div></div>
+  <div class="bsec"><h2 class="disp">Организатор</h2><div class="host"><div class="av">${b.host.replace(/[«»"]/g,"").trim()[0]}</div><div><b>${b.host}</b><small>На CAMPS.ES с ${b.since} · отвечает ${b.resp}</small><small style="margin-top:4px">✓ Личность и документы проверены · ${b.cancel}</small></div></div></div>
+ </div>
+ <aside class="book" id="book"><div class="top"><div class="price"><b>${fmt(b.price)} ₽</b> <small>чел. / сутки</small></div><span class="rt">${stars(b.rating)} <small>(${b.reviews})</small></span></div>
+  <div class="dgrid"><div class="two"><label class="c"><span>Заезд</span><input type="date" id="d-from"></label><label class="c"><span>Выезд</span><input type="date" id="d-to"></label></div>
+   <div class="c"><span>Людей в команде (макс. ${b.cap})</span><div class="stepper"><button type="button" id="minus" aria-label="Меньше">−</button><input id="ppl" type="number" min="1" max="${b.cap}" value="25"><button type="button" id="plus" aria-label="Больше">+</button></div></div></div>
+  <div class="warn" id="warn" hidden>На эти даты база занята. Выберите другие.</div>
+  <div class="calc" id="calc"></div>
+  <button class="btn block" id="go" type="button">Забронировать</button>
+  <div class="note">Пока вы ничего не платите</div>
+  <div class="tb"><div><i>✓</i>${b.cancel}</div><div><i>✓</i>Итоговая цена без скрытых сборов</div><div><i>✓</i>Ответ базы ${b.resp}</div></div></aside></div>
+ <div class="mbar" id="mbar"><div><b id="mb-p">${fmt(b.price)} ₽</b><small>чел. / сутки</small></div><button class="btn sm" id="mb-go" type="button">Выбрать даты</button></div>`;
+ /* лайтбокс */
+ let li=0;const show=i=>{li=(i+b.photos.length)%b.photos.length;$("#lbi").src=`img/${b.photos[li]}.jpg`;$("#lb").classList.add("open")};
+ $$(".mos button").forEach(x=>x.onclick=()=>show(+x.dataset.i));
+ $("#lb .x").onclick=()=>$("#lb").classList.remove("open");$("#lb .p").onclick=()=>show(li-1);$("#lb .n").onclick=()=>show(li+1);$("#lb").onclick=e=>{if(e.target.id==="lb")$("#lb").classList.remove("open")};
+ /* бронь */
+ const iso=d=>d.toISOString().slice(0,10);const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+ let start=add(new Date(),14);for(let i=0;i<60&&!isFree(b,iso(start),iso(add(start,6)));i++)start=add(start,1);
+ const q=new URLSearchParams(location.search);
+ $("#d-from").value=q.get("from")||iso(start);$("#d-to").value=q.get("to")||iso(add(start,6));if(q.get("size"))$("#ppl").value=q.get("size");
+ function cal(){
+  const f=$("#d-from").value,t=$("#d-to").value;const base=f?new Date(f):new Date();let out="";
+  for(let m=0;m<2;m++){const d=new Date(base.getFullYear(),base.getMonth()+m,1);const name=d.toLocaleString("ru-RU",{month:"long",year:"numeric"});
+   let h=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(x=>`<span class="h">${x}</span>`).join("");const lead=(d.getDay()+6)%7;h+="<span></span>".repeat(lead);
+   const dim=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+   for(let i=1;i<=dim;i++){const s=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;let c="";
+    if(b.busy.some(([a,z])=>s>=a&&s<=z))c="busy";else if(f&&t&&s>=f&&s<=t)c="sel"+(s===f?" a":"")+(s===t?" z":"");h+=`<span class="${c}">${i}</span>`}
+   out+=`<div><h4>${name}</h4><div class="cg">${h}</div></div>`}
+  $("#cal").innerHTML=out}
+ function calc(){
+  const f=$("#d-from").value,t=$("#d-to").value;const p=Math.min(b.cap,Math.max(1,+$("#ppl").value||1));
+  const bad=!f||!t||t<=f,busy=!bad&&!isFree(b,f,t);$("#warn").hidden=!busy;
+  const d=Math.max(1,Math.round((new Date(t)-new Date(f))/864e5)),sum=p*d*b.price,fee=Math.round(sum*.05),tot=sum+fee;
+  $("#calc").innerHTML=bad?`<div>Выберите даты заезда и выезда</div>`:`<div><span>${fmt(b.price)} ₽ × ${p} чел. × ${d} сут.</span><span>${fmt(sum)} ₽</span></div><div><span>Сервисный сбор 5%</span><span>${fmt(fee)} ₽</span></div><div class="tot"><span>Итого</span><b>${fmt(tot)} ₽</b></div>`;
+  $("#go").disabled=bad||busy;cal();return{p,tot,f,t}}
+ $("#ppl").addEventListener("input",calc);$("#d-from").addEventListener("change",()=>{if($("#d-to").value<=$("#d-from").value)$("#d-to").value=iso(add($("#d-from").value,1));calc()});$("#d-to").addEventListener("change",calc);
+ $("#plus").onclick=()=>{$("#ppl").value=Math.min(b.cap,(+$("#ppl").value||0)+5);calc()};$("#minus").onclick=()=>{$("#ppl").value=Math.max(1,(+$("#ppl").value||0)-5);calc()};
+ const book=()=>{const c=calc();$("#mdl").innerHTML=`<dt>База</dt><dd>${b.name}</dd><dt>Даты</dt><dd>${rd(c.f)} — ${rd(c.t)}</dd><dt>Людей</dt><dd>${c.p}</dd><dt>Сумма</dt><dd>${fmt(c.tot)} ₽</dd><dt>Номер брони</dt><dd>CE-${Math.floor(100000+Math.random()*899999)}</dd>`;$("#modal").classList.add("open")};
+ $("#go").onclick=book;$("#mb-go").onclick=()=>$("#book").scrollIntoView({behavior:"smooth"});
+ const close=()=>$("#modal").classList.remove("open");$("#mclose").onclick=close;$("#modal .x").onclick=close;$("#modal").onclick=e=>{if(e.target.id==="modal")close()};
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"){close();$("#lb").classList.remove("open")}});
+ calc();
+});
+</script></body></html>

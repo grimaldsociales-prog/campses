@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Найти спортивную базу — CAMPS.ES</title>
+<link rel="stylesheet" href="css/style.css"></head>
+<body data-page="search">
+<div class="wrap sp-head"><span class="mono blue">/ КАТАЛОГ БАЗ</span><h1 class="disp">Найди <span class="hl"><span>базу</span></span></h1></div>
+<div class="fbar"><div class="wrap" id="fbar">
+ <div class="fc"><button type="button" data-p="p-sport" id="b-sport">Вид спорта</button><div class="pop" id="p-sport"><h5>Вид спорта</h5><div class="opt" id="o-sport"></div></div></div>
+ <div class="fc"><button type="button" data-p="p-region" id="b-region">Регион</button><div class="pop" id="p-region"><h5>Регион</h5><div class="opt" id="o-region"></div></div></div>
+ <div class="fc"><button type="button" data-p="p-dates" id="b-dates">Даты</button><div class="pop" id="p-dates"><h5>Даты сборов</h5><div class="two"><input class="fld" type="date" id="f-from" aria-label="Заезд"><input class="fld" type="date" id="f-to" aria-label="Выезд"></div></div></div>
+ <div class="fc"><button type="button" data-p="p-size" id="b-size">Команда</button><div class="pop" id="p-size"><h5>Размер команды, от</h5><div class="rv-val" id="v-size">любой</div><input type="range" id="f-size" min="0" max="250" step="5" value="0"></div></div>
+ <div class="fc"><button type="button" data-p="p-price" id="b-price">Цена</button><div class="pop" id="p-price"><h5>Цена за человека в сутки, до</h5><div class="rv-val" id="v-price">6 000 ₽</div><input type="range" id="f-price" min="2000" max="6000" step="100" value="6000"></div></div>
+ <div class="fc"><button type="button" data-p="p-infra" id="b-infra">Инфраструктура</button><div class="pop" id="p-infra"><h5>Что должно быть на базе</h5><div id="f-infra"></div></div></div>
+ <button type="button" class="reset" id="reset">Сбросить</button>
+</div></div>
+<div class="wrap split">
+ <main>
+  <div class="sortbar"><div class="cnt">Найдено: <b id="count">0</b></div>
+   <select class="fld" id="sort"><option value="rating">Сначала с лучшим рейтингом</option><option value="price-asc">Сначала дешёвые</option><option value="price-desc">Сначала дорогие</option><option value="cap">Сначала вместительные</option></select></div>
+  <div class="tags" id="tags"></div>
+  <div class="list" id="res"></div>
+ </main>
+ <aside class="mapw" id="mapw"><div class="map" id="map"></div></aside>
+</div>
+<button class="btn dark mobtog" id="mobtog" type="button">🗺 Карта</button>
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const q=new URLSearchParams(location.search);
+ const S={sport:q.get("sport")||"",region:q.get("region")||""};
+ const opts=(id,arr,key,any)=>{$(id).innerHTML=[["",any],...arr.map(a=>[a,a])].map(([v,t])=>`<button type="button" data-v="${v}" class="${S[key]===v?"on":""}">${t}</button>`).join("")};
+ opts("#o-sport",SPORTS,"sport","Любой");opts("#o-region",REGIONS,"region","Вся Россия");
+ $("#f-infra").innerHTML=Object.entries(INFRA).map(([k,v])=>`<label class="chk"><input type="checkbox" data-k="${k}"><i></i>${v}</label>`).join("");
+ if(q.get("from"))$("#f-from").value=q.get("from");if(q.get("to"))$("#f-to").value=q.get("to");
+ if(q.get("size"))$("#f-size").value=Math.min(250,Math.round(+q.get("size")/5)*5);
+ /* карта */
+ $("#map").innerHTML=`<svg class="bgm" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><pattern id="g" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M8 0H0V8" fill="none" stroke="#c6d6bf" stroke-width=".25"/></pattern></defs>
+  <rect width="100" height="100" fill="#dce9d6"/><rect width="100" height="100" fill="url(#g)"/>
+  <path d="M0 0H100V12C85 18 80 10 66 18S40 10 30 20 12 14 0 20Z" fill="#cfe0c8"/>
+  <path d="M0 96C12 88 22 94 34 84S52 96 62 100H0Z" fill="#bcd5ea"/><path d="M0 52C6 46 10 56 14 62S4 70 0 66Z" fill="#bcd5ea"/>
+  <path d="M60 100C66 92 80 96 100 88V100Z" fill="#e8e0c8"/>
+  <path d="M22 18C30 26 40 24 48 30S60 44 70 40" fill="none" stroke="#fff" stroke-width=".8" opacity=".7"/>
+  <path d="M34 44C44 50 56 50 66 58S84 60 90 66" fill="none" stroke="#fff" stroke-width=".8" opacity=".7"/></svg>
+  <div class="mlabel">Схематичная карта (прототип)</div>`+CITIES.map(([n,x,y])=>`<span class="city" style="left:${x}%;top:${y}%">${n}</span>`).join("")+BASES.map(b=>`<button class="pin" data-id="${b.id}" style="left:${b.map[0]}%;top:${b.map[1]}%">${fmt(b.price)} ₽</button>`).join("")+`<a class="mpop" id="mpop"></a>`;
+ const st=()=>({sport:S.sport,region:S.region,from:$("#f-from").value,to:$("#f-to").value,size:+$("#f-size").value,price:+$("#f-price").value,infra:$$("#f-infra input:checked").map(i=>i.dataset.k),sort:$("#sort").value});
+ function setBtn(id,txt,on){const b=$(id);b.textContent=txt;b.classList.toggle("set",on)}
+ function run(){
+  const s=st();
+  $("#v-size").textContent=s.size?`от ${s.size} чел.`:"любой";$("#v-price").textContent=fmt(s.price)+" ₽";
+  let r=BASES.filter(b=>(!s.sport||b.sports.includes(s.sport))&&(!s.region||b.region===s.region)&&b.cap>=s.size&&b.price<=s.price&&s.infra.every(k=>b.infra[k])&&isFree(b,s.from,s.to));
+  r.sort({rating:(a,b)=>b.rating-a.rating,"price-asc":(a,b)=>a.price-b.price,"price-desc":(a,b)=>b.price-a.price,cap:(a,b)=>b.cap-a.cap}[s.sort]);
+  $("#count").textContent=r.length;
+  $("#res").innerHTML=r.length?r.map(b=>card(b,{row:true,hl:s.sport})).join(""):`<div class="empty"><h3 class="disp">Пусто.</h3><p>Под такие параметры баз нет. Ослабьте фильтры или сдвиньте даты.</p><br><button class="btn" onclick="document.getElementById('reset').click()">Сбросить фильтры</button></div>`;
+  const ids=r.map(b=>b.id);$$(".pin").forEach(p=>p.classList.toggle("off",!ids.includes(p.dataset.id)));
+  setBtn("#b-sport",s.sport||"Вид спорта",!!s.sport);setBtn("#b-region",s.region?s.region.replace(" область"," обл.").replace("Республика ","Респ. "):"Регион",!!s.region);
+  setBtn("#b-dates",s.from&&s.to?`${rd(s.from).slice(0,5)} — ${rd(s.to).slice(0,5)}`:"Даты",!!(s.from&&s.to));
+  setBtn("#b-size",s.size?`от ${s.size} чел.`:"Команда",!!s.size);setBtn("#b-price",s.price<6000?`до ${fmt(s.price)} ₽`:"Цена",s.price<6000);
+  setBtn("#b-infra",s.infra.length?`Инфраструктура · ${s.infra.length}`:"Инфраструктура",!!s.infra.length);
+  const t=[];if(s.sport)t.push(["sport",s.sport]);if(s.region)t.push(["region",s.region]);s.infra.forEach(k=>t.push(["i:"+k,INFRA[k]]));
+  $("#tags").innerHTML=t.map(([k,x])=>`<span class="tag-x">${x}<button data-k="${k}" aria-label="Убрать">×</button></span>`).join("");
+  $$(".opt").forEach(o=>$$("button",o).forEach(b=>b.classList.toggle("on",b.dataset.v===S[o.id.slice(2)])));
+ }
+ $("#tags").onclick=e=>{const k=e.target.dataset.k;if(!k)return;if(k.startsWith("i:"))$(`#f-infra [data-k=${k.slice(2)}]`).checked=false;else S[k]="";run()};
+ $$(".opt").forEach(o=>o.onclick=e=>{const b=e.target.closest("button");if(!b)return;S[o.id.slice(2)]=b.dataset.v;run();closeAll()});
+ const closeAll=()=>$$(".pop").forEach(p=>p.classList.remove("open"));
+ $$(".fc>button").forEach(b=>b.onclick=e=>{e.stopPropagation();const p=$("#"+b.dataset.p),was=p.classList.contains("open");closeAll();p.classList.toggle("open",!was)});
+ document.addEventListener("click",e=>{if(!e.target.closest(".pop"))closeAll()});
+ $$(".pop input").forEach(i=>{i.addEventListener("input",run);i.addEventListener("change",run)});
+ $("#f-from").addEventListener("change",()=>{if(!$("#f-to").value||$("#f-to").value<$("#f-from").value)$("#f-to").value=$("#f-from").value;run()});
+ $("#sort").onchange=run;
+ $("#reset").onclick=()=>{S.sport=S.region="";$$(".pop input[type=date]").forEach(s=>s.value="");$("#f-size").value=0;$("#f-price").value=6000;$$("#f-infra input").forEach(i=>i.checked=false);run()};
+ /* карта <-> список */
+ const mp=$("#mpop");
+ $("#map").addEventListener("click",e=>{const p=e.target.closest(".pin");if(!p)return;const b=BASES.find(x=>x.id===p.dataset.id);
+  $$(".pin").forEach(x=>x.classList.toggle("on",x===p));mp.href="base.html?id="+b.id;mp.className="mpop open";
+  mp.innerHTML=`<img src="img/${b.photos[0]}.jpg" alt=""><div><b>${b.name}</b><small>${b.city}</small><div style="margin-top:6px;font-weight:700">${fmt(b.price)} ₽ <small>чел./сутки</small> · ${stars(b.rating)}</div></div>`;
+  const c=$(`.card[data-id=${b.id}]`);if(c){$$(".card").forEach(x=>x.classList.toggle("active",x===c));if(innerWidth>1180)c.scrollIntoView({behavior:"smooth",block:"center"})}});
+ $("#res").addEventListener("mouseover",e=>{const c=e.target.closest(".card");$$(".pin").forEach(p=>p.classList.toggle("on",!!c&&p.dataset.id===c.dataset.id))});
+ $("#res").addEventListener("mouseleave",()=>$$(".pin").forEach(p=>p.classList.remove("on")));
+ $("#mobtog").onclick=()=>{const m=$("#mapw");m.classList.toggle("show");$("#mobtog").textContent=m.classList.contains("show")?"☰ Список":"🗺 Карта"};
+ run();
+});
+</script></body></html>

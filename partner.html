@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Разместить базу — CAMPS.ES</title>
+<link rel="stylesheet" href="css/style.css"></head>
+<body data-page="partner">
+<section class="phero"><div class="wrap">
+ <div><span class="sticker">Для владельцев баз</span>
+ <h1 class="disp" style="margin-top:24px">Заполни<br>свою базу<br><span class="hl"><span>командами</span></span></h1>
+ <p>Разместите базу на CAMPS.ES бесплатно. Команды со всей страны находят вас по виду спорта, региону и инфраструктуре и присылают заявки на нужные даты.</p>
+ <a class="btn" href="#form">Подать заявку →</a> <a class="btn ghost" href="#how">Как это работает</a></div>
+ <div class="dash"><span class="sticker blue">Новая заявка</span><div class="ph"><img src="img/stadium.jpg" alt="Стадион"></div>
+  <div class="req"><div class="av">М</div><div><b>ФК «Метеор-М»</b><small>25 чел. · 13–19 дек · футбол</small></div><div class="sum">535 500 ₽</div></div>
+  <div class="req"><div class="av" style="background:var(--ink)">С</div><div><b>ХК «Северяне»</b><small>40 чел. · 2–9 янв · хоккей</small></div><div class="sum">812 000 ₽</div></div>
+  <div style="display:flex;gap:10px;margin-top:14px"><button class="btn sm block" type="button">Принять</button><button class="btn sm ghost block" type="button">Другие даты</button></div></div>
+</div></section>
+<section class="sec" id="how" style="padding-top:30px"><div class="wrap">
+ <div class="sec-h"><div><span class="tag">/ ЗАЧЕМ ЭТО БАЗЕ</span><h2 class="disp">Шесть причин<br><span class="blue">зайти</span></h2></div></div>
+ <div class="ben">
+  <div class="bn"><div class="big">0₽</div><h3>Бесплатное размещение</h3><p>Платите только процент с подтверждённой брони. Нет брони — нет платежа.</p></div>
+  <div class="bn"><div class="big">×3</div><h3>Больше заявок</h3><p>Команды ищут по фильтрам и видят именно ваши плюсы: лёд, поля, бассейн.</p></div>
+  <div class="bn"><div class="big">24/7</div><h3>Календарь занятости</h3><p>Закрывайте даты, подтверждайте заявки, не теряйте сезон из-за переписок.</p></div>
+  <div class="bn"><div class="big">10′</div><h3>Анкета за 10 минут</h3><p>Заполнили форму, мы помогли оформить страницу и подготовили к публикации.</p></div>
+  <div class="bn"><div class="big">★</div><h3>Репутация</h3><p>Отзывы реальных команд работают на вас лучше любой рекламы.</p></div>
+  <div class="bn"><div class="big">RU</div><h3>Всё по-русски</h3><p>Рубли, российские регионы и поддержка живыми людьми. Без сюрпризов.</p></div>
+ </div></div></section>
+<section class="fsec" id="form"><div class="wrap"><div class="fgrid">
+ <div><span class="mono blue">/ ЗАЯВКА</span><h2 class="disp" style="margin-top:10px">Подай<br>базу</h2><p style="font-size:19px;max-width:420px;color:var(--ink2)">Заполните форму, и менеджер CAMPS.ES свяжется с вами в течение рабочего дня. Поля со * обязательны.</p>
+  <span class="sticker" style="margin-top:34px">Публикация за 2 дня</span></div>
+ <div><form id="pf" novalidate>
+  <div class="row"><label class="t" for="n">Название базы *</label><input class="fld" id="n" placeholder="Например, «Дубрава Арена»"><div class="err"></div></div>
+  <div class="two row"><div><label class="t" for="r">Регион *</label><select class="fld" id="r"></select><div class="err"></div></div><div><label class="t" for="c">Город / адрес</label><input class="fld" id="c"></div></div>
+  <div class="row"><label class="t">Виды спорта *</label><div id="s" class="two"></div><div class="err"></div></div>
+  <div class="two row"><div><label class="t" for="cap">Вместимость, чел. *</label><input class="fld" id="cap" type="number" min="1"><div class="err"></div></div><div><label class="t" for="pr">Цена, ₽ за чел./сутки *</label><input class="fld" id="pr" type="number" min="0"><div class="err"></div></div></div>
+  <div class="row"><label class="t">Инфраструктура</label><div id="inf" class="two"></div></div>
+  <div class="two row"><div><label class="t" for="nm">Контактное лицо *</label><input class="fld" id="nm"><div class="err"></div></div><div><label class="t" for="ph">Телефон или email *</label><input class="fld" id="ph"><div class="err"></div></div></div>
+  <div class="row"><label class="t" for="d">О базе</label><textarea class="fld" id="d" rows="3"></textarea></div>
+  <button class="btn block" type="submit">Отправить заявку →</button>
+ </form>
+ <div class="okbox" id="ok" hidden><h3 class="disp">Принято!</h3><p>Заявка на базу <b id="okn"></b> отправлена. Менеджер свяжется с вами в течение рабочего дня.</p><p class="mono" style="margin-top:14px">Демо: данные никуда не уходят.</p><br><a class="btn dark" href="index.html">На главную</a></div></div>
+</div></div></section>
+<section class="sec" id="faq" style="background:#fff"><div class="wrap"><div class="sec-h"><h2 class="disp">Вопросы</h2></div><div class="faq">
+ <details open><summary>Сколько стоит размещение?</summary><p>Размещение бесплатное. Мы берём комиссию только с подтверждённых броней (в демо — условно 5%).</p></details>
+ <details><summary>Как я получаю заявки?</summary><p>Заявки приходят на email и в личный кабинет. Вы подтверждаете или предлагаете другие даты.</p></details>
+ <details><summary>Можно ли закрыть даты?</summary><p>Да, в календаре занятости вы закрываете любые периоды — для сборов своих команд или ремонта.</p></details>
+ <details><summary>Нужна ли база с проживанием?</summary><p>Нет. Можно разместить только поля или залы, команды смогут отфильтровать такие базы.</p></details>
+</div></div></section>
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ $("#r").innerHTML='<option value="">Выберите регион</option>'+REGIONS.map(s=>`<option>${s}</option>`).join("");
+ $("#s").innerHTML=SPORTS.map(s=>`<label class="chk"><input type="checkbox"><i></i>${s}</label>`).join("");
+ $("#inf").innerHTML=Object.values(INFRA).map(v=>`<label class="chk"><input type="checkbox"><i></i>${v}</label>`).join("");
+ $("#pf").addEventListener("submit",e=>{e.preventDefault();let ok=true,first=null;
+  const chk=(id,fn,msg)=>{const el=$("#"+id),er=el.parentNode.querySelector(".err");const v=fn(el);el.classList.toggle("bad",!v);er.textContent=v?"":msg;if(!v){ok=false;first=first||el}};
+  chk("n",e=>e.value.trim().length>1,"Укажите название");chk("r",e=>e.value,"Выберите регион");chk("s",e=>e.querySelectorAll("input:checked").length,"Выберите хотя бы один вид спорта");
+  chk("cap",e=>+e.value>0,"Укажите вместимость");chk("pr",e=>e.value!==""&&+e.value>=0,"Укажите цену");chk("nm",e=>e.value.trim(),"Укажите имя");chk("ph",e=>e.value.trim().length>4,"Укажите контакт");
+  if(!ok){first.scrollIntoView({block:"center"});return}
+  $("#okn").textContent="«"+$("#n").value+"»";$("#pf").hidden=true;$("#ok").hidden=false;$("#ok").scrollIntoView({behavior:"smooth",block:"center"})});
+});
+</script></body></html>

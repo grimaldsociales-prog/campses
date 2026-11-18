@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CAMPS.ES — найди спортивную базу и забронируй сборы</title>
+<meta name="description" content="CAMPS.ES — маркетплейс спортивных баз. Команды находят базу по параметрам и бронируют сборы онлайн.">
+<link rel="stylesheet" href="css/style.css"></head>
+<body data-page="home">
+<section class="hero"><div class="wrap">
+ <div class="hero-l">
+  <div class="hero-kick"><span class="pill"><i></i> Сезон сборов открыт</span><span class="mono">Маркетплейс спортивных баз</span></div>
+  <h1 class="disp"><span>Найди</span><span class="o">свою</span><span><em class="hl" style="font-style:normal"><em style="font-style:normal">базу</em></em></span></h1>
+  <p class="sub">Поля, лёд, залы, проживание и питание — всё для сборов вашей команды. Сравнивайте базы по параметрам и бронируйте онлайн.</p>
+ </div>
+ <div class="hero-r">
+  <div class="hero-ph"><img src="img/player.jpg" alt="Футболист на поле"></div>
+  <span class="sticker s1">0 ₽ комиссия для команд</span>
+  <span class="sticker blue s2">Бронь за 2 минуты</span>
+  <div class="fl"><b>4.8</b><span>средний рейтинг баз по отзывам команд*</span></div>
+ </div>
+</div></section>
+<div class="wrap"><form class="sbar" id="sform" action="search.html" method="get">
+ <label><span>Вид спорта</span><select name="sport" id="fs"></select></label>
+ <label><span>Регион</span><select name="region" id="fr"></select></label>
+ <label><span>Даты сборов</span><div class="dates"><input type="date" name="from" aria-label="Заезд"><input type="date" name="to" aria-label="Выезд"></div></label>
+ <label><span>Людей в команде</span><input type="number" name="size" min="1" max="500" placeholder="Сколько?"></label>
+ <button type="submit">Найти <span aria-hidden="true">→</span></button>
+</form></div>
+
+<section class="trust"><div class="wrap">
+ <div class="tn"><b>480*</b><span>баз в каталоге</span></div>
+ <div class="tn"><b>12К</b><span>команд на сборах</span></div>
+ <div class="tn"><b>24ч</b><span>ответ базы на заявку</span></div>
+ <div class="clubs"><span>ФК Метеор</span><span>СШОР Динамо-Юг</span><span>ХК Северяне</span></div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+ <div class="sec-h"><div><span class="tag">/ ВЫБЕРИ СВОЙ СПОРТ</span><h2 class="disp">Какой <span class="blue">спорт?</span></h2></div><a class="btn ghost" href="search.html">Все базы →</a></div>
+ <div class="tiles" id="tiles"></div>
+</div></section>
+
+<section class="sec" id="how" style="padding-top:20px"><div class="wrap">
+ <div class="sec-h"><div><span class="tag">/ КАК ЭТО РАБОТАЕТ</span><h2 class="disp">Четыре шага.<br><span class="blue">Ноль нервов.</span></h2></div>
+  <div class="tabs" role="tablist"><button class="on" data-t="teams">Командам</button><button data-t="bases">Базам</button></div></div>
+ <div class="panel" id="p-teams"><div class="steps">
+  <div class="step"><div class="n">1</div><h3>Задай параметры</h3><p>Вид спорта, регион, даты и размер команды. Фильтры по инфраструктуре — от полей до медцентра.</p></div>
+  <div class="step"><div class="n">2</div><h3>Сравни на карте</h3><p>Фото, цена за человека в сутки, отзывы команд и реальная занятость по датам.</p></div>
+  <div class="step"><div class="n">3</div><h3>Забронируй</h3><p>Выбери даты и людей — итоговая цена видна сразу. Заявка уходит на базу мгновенно.</p></div>
+  <div class="step"><div class="n">4</div><h3>Приезжай и работай</h3><p>Подтверждение и детали — в личном кабинете. Бесплатная отмена по условиям базы.</p></div></div></div>
+ <div class="panel" id="p-bases" hidden><div class="steps">
+  <div class="step"><div class="n">1</div><h3>Заполни анкету</h3><p>Расскажи о полях, залах, номерах и питании. Займёт 10 минут.</p></div>
+  <div class="step"><div class="n">2</div><h3>Загрузи фото</h3><p>Покажи базу в лучшем свете. Мы поможем оформить страницу.</p></div>
+  <div class="step"><div class="n">3</div><h3>Получай заявки</h3><p>Команды находят вас по фильтрам и присылают запросы на даты.</p></div>
+  <div class="step"><div class="n">4</div><h3>Веди календарь</h3><p>Подтверждай брони и управляй занятостью в одном окне.</p></div></div></div>
+</div></section>
+
+<section class="sec" style="padding-top:20px"><div class="wrap">
+ <div class="sec-h"><div><span class="tag">/ ВЫБОР КОМАНД</span><h2 class="disp">Горячие базы</h2></div><a class="btn ghost" href="search.html">Смотреть все →</a></div>
+ <div class="grid" id="feat"></div>
+</div></section>
+
+<section class="sec" style="padding-top:20px"><div class="wrap">
+ <div class="sec-h"><div><span class="tag">/ ПОЧЕМУ CAMPS.ES</span><h2 class="disp">Без сюрпризов</h2></div></div>
+ <div class="why">
+  <div class="wy"><i>✓</i><h3>Проверенные базы</h3><p>Фото и инфраструктура сверены с анкетой. Отзывы — только от реальных команд.</p></div>
+  <div class="wy"><i>₽</i><h3>Цена сразу</h3><p>Цена за человека в сутки и итог для вашей команды — до заявки, без скрытых сборов.</p></div>
+  <div class="wy"><i>↺</i><h3>Гибкая отмена</h3><p>Условия отмены видны на странице базы. У многих — бесплатная за 2–4 недели.</p></div>
+  <div class="wy"><i>☎</i><h3>Живая поддержка</h3><p>Менеджер поможет с трансфером, питанием и расписанием полей. Отвечаем в течение дня.</p></div>
+ </div>
+ <p class="mono" style="margin-top:22px;color:var(--mute)">* Цифры иллюстративные, для демо-прототипа.</p>
+</div></section>
+
+<section class="cta"><div class="ph"><img src="img/stadium.jpg" alt=""></div><div class="wrap">
+ <span class="sticker">Для владельцев баз</span>
+ <h2 class="disp" style="margin-top:22px">Есть база?<br><em>Заполни</em> её<br>командами</h2>
+ <p>Разместите базу на CAMPS.ES бесплатно — получайте заявки от команд, которые ищут именно ваши поля, лёд и залы.</p>
+ <a class="btn lime" href="partner.html">Разместить базу →</a>
+</div></section>
+
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ $("#fs").innerHTML='<option value="">Любой</option>'+SPORTS.map(s=>`<option>${s}</option>`).join("");
+ $("#fr").innerHTML='<option value="">Вся Россия</option>'+REGIONS.map(s=>`<option>${s}</option>`).join("");
+ const T=[["Футбол","player"],["Хоккей","hockey"],["Плавание","swimmer"],["Баскетбол","hoop"],["Биатлон и лыжи","ski"],["Единоборства","ropes"]];
+ $("#tiles").innerHTML=T.map(([s,i])=>`<a class="tile" href="search.html?sport=${encodeURIComponent(s)}"><img src="img/${i}.jpg" alt="${s}" loading="lazy"><b>${s}</b><small>${BASES.filter(b=>b.sports.includes(s)).length} баз</small></a>`).join("");
+ $("#feat").innerHTML=["dubrava","volna","bastion"].map(id=>card(BASES.find(b=>b.id===id))).join("");
+ $$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));$("#p-teams").hidden=b.dataset.t!=="teams";$("#p-bases").hidden=b.dataset.t!=="bases"});
+ const f=$("#sform");f.querySelector("[name=from]").addEventListener("change",e=>{const t=f.querySelector("[name=to]");if(!t.value||t.value<e.target.value)t.value=e.target.value});
+ f.addEventListener("submit",()=>{$$("input,select",f).forEach(i=>{if(!i.value)i.disabled=true})});
+ window.addEventListener("pageshow",()=>$$("input,select",f).forEach(i=>i.disabled=false));
+});
+</script></body></html>
