@@ -380,3 +380,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .phero .wrap>*,.fgrid>*{min-width:0}
 @media (max-width:600px){.phero h1{font-size:16.5vw!important}.phero .btn{display:flex;margin-bottom:10px}}
 .card.row .pic img{position:absolute;inset:0}
+
+/* logo svg */
+.logo img{height:34px;width:auto;display:block;transition:transform .2s}.logo:hover img{transform:rotate(-2deg) scale(1.04)}
+.ftr-logo .logo img{height:auto;width:min(100%,1100px)}
+@media (max-width:600px){.logo img{height:28px}}

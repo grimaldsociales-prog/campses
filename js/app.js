@@ -4,7 +4,7 @@ const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelecto
 window.$=$;window.$$=$$;
 const fmt=n=>new Intl.NumberFormat("ru-RU").format(n).replace(/\u00a0/g," ");
 window.fmt=fmt;
-window.LOGO='<a class="logo" href="index.html" aria-label="CAMPS.ES — на главную"><b>CAMPS</b><i>.ES</i></a>';
+window.LOGO='<a class="logo" href="index.html" aria-label="CAMPS.ES — на главную"><img src="brand/logo/camps-es-logo.svg" alt="CAMPS.ES" width="148" height="34"></a>';
 window.img=(n)=>`img/${n}.jpg`;
 window.photo=(b,i=0,alt)=>`<img src="img/${b.photos[i%b.photos.length]}.jpg" alt="${alt||b.name}" loading="lazy" style="object-position:${["50% 50%","40% 60%","60% 40%","50% 30%","30% 50%"][i%5]}">`;
 window.stars=r=>`<span class="star">★</span> ${r.toFixed(1)}`;
@@ -21,9 +21,9 @@ function footer(){
  f.innerHTML=`<div class="wrap"><div class="ftr-top"><div class="lead">Сборы — это серьёзно.<br><span>Базы — тоже.</span></div>
  <div class="cols"><div><h4>Командам</h4><ul><li><a href="search.html">Найти базу</a></li><li><a href="search.html?sport=Футбол">Футбол</a></li><li><a href="search.html?sport=Хоккей">Хоккей</a></li><li><a href="search.html?sport=Плавание">Плавание</a></li></ul></div>
  <div><h4>Базам</h4><ul><li><a href="partner.html">Разместить базу</a></li><li><a href="partner.html#form">Заявка</a></li><li><a href="partner.html#faq">Вопросы</a></li></ul></div>
- <div><h4>CAMPS.ES</h4><ul><li><a href="index.html#how">Как это работает</a></li><li><a href="#">Контакты</a></li><li><a href="#">Условия</a></li></ul></div></div></div>
+ <div><h4>CAMPS.ES</h4><ul><li><a href="index.html#how">Как это работает</a></li><li><a href="#">Контакты</a></li><li><a href="#">Условия</a></li><li><a href="brand/">Брендбук</a></li></ul></div></div></div>
  <div class="ftr-logo">${LOGO}</div>
- <div class="small"><span>© 2026 CAMPS.ES — демо-прототип. Все базы, отзывы и цифры вымышлены. Фото: Unsplash.</span><span>Светлая версия · v2</span></div></div>`;
+ <div class="small"><span>© 2026 CAMPS.ES — демо-прототип. Все базы, отзывы и цифры вымышлены. Фото: Unsplash.</span><span>Светлая версия · v2 · <a href="brand/" style="text-decoration:underline">Брендбук</a></span></div></div>`;
  document.body.append(f);
 }
 window.card=function(b,o={}){
